@@ -1,0 +1,5 @@
+{
+ 	"WEBROOT": "/",
+ 	"WEBSOCKET": "ws://localhost:3000/"
+  
+}

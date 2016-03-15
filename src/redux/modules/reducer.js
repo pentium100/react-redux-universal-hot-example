@@ -1,24 +1,24 @@
-import { combineReducers } from 'redux';
+import {combineReducers} from 'redux';
 import multireducer from 'multireducer';
-import { routeReducer } from 'react-router-redux';
+import {routeReducer} from 'react-router-redux';
 import {reducer as reduxAsyncConnect} from 'redux-async-connect';
 
 import auth from './auth';
 import counter from './counter';
 import {reducer as form} from 'redux-form';
 import info from './info';
+import pos from './pos';
 import widgets from './widgets';
+import filters from './filters';
 
 export default combineReducers({
   routing: routeReducer,
   reduxAsyncConnect,
   auth,
+  filters,
   form,
-  multireducer: multireducer({
-    counter1: counter,
-    counter2: counter,
-    counter3: counter
-  }),
+  pos,
+  multireducer: multireducer({counter1: counter, counter2: counter, counter3: counter}),
   info,
   widgets
 });

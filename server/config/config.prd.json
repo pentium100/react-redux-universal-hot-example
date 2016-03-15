@@ -1,0 +1,5 @@
+{
+ "WEBROOT": "/exportAgent/",
+ "WEBSOCKET": "ws://www.itgzx.com:7878/exportAgent/"
+  
+}

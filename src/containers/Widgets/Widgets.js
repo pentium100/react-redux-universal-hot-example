@@ -6,6 +6,7 @@ import {isLoaded, load as loadWidgets} from 'redux/modules/widgets';
 import {initializeWithKey} from 'redux-form';
 import { WidgetForm } from 'components';
 import { asyncConnect } from 'redux-async-connect';
+import * as filterActions from 'redux/modules/filters';
 
 @asyncConnect([{
   deferred: true,
@@ -20,9 +21,10 @@ import { asyncConnect } from 'redux-async-connect';
     widgets: state.widgets.data,
     editing: state.widgets.editing,
     error: state.widgets.error,
-    loading: state.widgets.loading
+    loading: state.widgets.loading,
+    filter: state.filters.widget
   }),
-  {...widgetActions, initializeWithKey })
+  {...widgetActions, initializeWithKey, ...filterActions })
 export default class Widgets extends Component {
   static propTypes = {
     widgets: PropTypes.array,
@@ -31,15 +33,29 @@ export default class Widgets extends Component {
     initializeWithKey: PropTypes.func.isRequired,
     editing: PropTypes.object.isRequired,
     load: PropTypes.func.isRequired,
+    init: PropTypes.func.isRequired,
+    count: PropTypes.func.isRequired,
+    filter: PropTypes.object,
     editStart: PropTypes.func.isRequired
   };
+
+  constructor(props) {
+    super(props);
+    this.props.init('widget', {'count': 1});
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.filter !== this.props.filter) {
+      console.log('nextProps & this.props is different!');
+    }
+  }
 
   render() {
     const handleEdit = (widget) => {
       const {editStart} = this.props; // eslint-disable-line no-shadow
       return () => editStart(String(widget.id));
     };
-    const {widgets, error, editing, loading, load} = this.props;
+    const {widgets, error, editing, loading, load, count} = this.props;
     let refreshClassName = 'fa fa-refresh';
     if (loading) {
       refreshClassName += ' fa-spin';
@@ -51,6 +67,10 @@ export default class Widgets extends Component {
           Widgets
           <button className={styles.refreshBtn + ' btn btn-success'} onClick={load}>
             <i className={refreshClassName}/> {' '} Reload Widgets
+          </button>
+
+          <button className={styles.refreshBtn + ' btn btn-success'} onClick={count.bind(null, 'widget')}>
+            <i className={refreshClassName}/> {' '}
           </button>
         </h1>
         <Helmet title="Widgets"/>
